@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación con Video y Música</title>
+
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+        background-image: url('assets/fondo-global-largo.jpg');
+        background-size: 100% auto;
+        background-position: center top;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: white;
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+        cursor: pointer;
+    }
+
+    .full-section {
+        width: 100vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: transparent;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .contenedor-principal {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        height: auto;
+        margin: auto;
+    }
+
+    .imagen-fija-wrapper {
+        position: relative;
+        padding-bottom: 177.77%;
+        width: 100%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .imagen-fija {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        object-fit: cover;
+        opacity: 0.8;
+        z-index: 1;
+    }
+
+    .contenido-animado {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .contenido-animado .imagen-scroll {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    @media (min-width: 1920px) {
+        .full-section { width: 1920px; padding: 100px 0; }
+        .contenedor-principal { width: 1080px; max-width: 1080px; }
+        .imagen-fija-wrapper { padding-bottom: 177.77%; }
+        .contenido-animado .imagen-scroll { max-width: 800px; }
+    }
+
+    .reveal {
+        opacity: 0;
+        transform: translateY(100px);
+        transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+    }
+
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Video de introducción */
+    #intro-video {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 9998;
+    }
+
+    /* Overlay negro */
+    #intro-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 9999;
+        transition: opacity 1s ease;
+    }
+
+    #intro-overlay.hidden,
+    #intro-video.hidden {
+        opacity: 0;
+        pointer-events: none;
+    }
+</style>
+</head>
+<body>
+
+<!-- Video de introducción -->
+<video id="intro-video" autoplay loop muted playsinline>
+  <source src="https://www.dropbox.com/scl/fi/j1do2c3jep1deextw7n8y/CartaL1.mp4?rlkey=xhtbymylwh5rz0zfvk46la75r&st=x9n6vh6e&raw=1" type="video/mp4">
+  Tu navegador no soporta el video.
+</video>
+
+<!-- Overlay negro -->
+<div id="intro-overlay"></div>
+
+<!-- Música -->
+<audio id="background-music" loop>
+    <source src="https://www.dropbox.com/scl/fi/ki2gj9lkbpdiu740m26nn/Ser-Tu-Mama.mp3?rlkey=4myscqhjnaj12if4o9m1kg52b&st=kf2mp8om&raw=1" type="audio/mpeg">
+</audio>
+
+<!-- Contenido principal -->
+<section id="seccion1" class="full-section">
+    <div class="contenedor-principal">
+        <div class="imagen-fija-wrapper">
+            <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/BGb1.png" class="imagen-fija">
+            <div class="contenido-animado">
+                <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/IFb1.png" class="imagen-scroll">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="seccion2" class="full-section">
+    <div class="contenedor-principal reveal">
+        <div class="imagen-fija-wrapper">
+            <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/BGb2.png" class="imagen-fija">
+            <div class="contenido-animado">
+                <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/IFb2.png" class="imagen-scroll">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="seccion3" class="full-section">
+    <div class="contenedor-principal reveal">
+        <div class="imagen-fija-wrapper">
+            <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/BGb3.png" class="imagen-fija">
+            <div class="contenido-animado">
+                <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/IFb3.png" class="imagen-scroll">
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Scroll reveal
+    const revealElements = document.querySelectorAll('.contenedor-principal.reveal');
+    const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    revealElements.forEach(el => observer.observe(el));
+
+    // Control de video y música
+    const video = document.getElementById('intro-video');
+    const overlay = document.getElementById('intro-overlay');
+    const music = document.getElementById('background-music');
+
+    // Al hacer clic en cualquier parte del body
+    document.body.addEventListener('click', () => {
+        overlay.classList.add('hidden'); // desaparece overlay
+        video.classList.add('hidden');   // desaparece video
+        music.play().catch(err => console.log("Error al reproducir música:", err));
+    }, { once: true }); // se ejecuta solo una vez
+});
+</script>
+
+</body>
+</html>
