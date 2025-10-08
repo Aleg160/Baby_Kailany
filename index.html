@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Baby Shower Kailany</title>
+<title>Invitación con Video y Música</title>
 
 <style>
     body, html {
@@ -73,6 +73,28 @@
         height: auto;
         border-radius: 8px;
     }
+    
+    .boton-mapa {
+        position: absolute;
+        bottom: 130px;              /* 🔼 más arriba (ajusta este valor a tu gusto) */
+        left: 50%;                 /* centra horizontalmente */
+        transform: translateX(-50%); /* corrige el centrado */
+        background-color: #fda8a6;
+        color: #333;
+        font-size: 0.9rem;
+        padding: 10px 18px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        z-index: 3;
+        transition: background 0.3s ease, transform 0.2s ease;
+        font-weight: 500;
+    }
+
+    .boton-mapa:hover {
+        background-color: #ffd3eb;
+        transform: scale(1.05);
+    }
 
     @media (min-width: 1920px) {
         .full-section { width: 1920px; padding: 100px 0; }
@@ -117,14 +139,29 @@
         opacity: 0;
         pointer-events: none;
     }
+
+    .video-seccion {
+        position: absolute;
+        top: 42%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 90%;
+        max-height: 90vh;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        display: none;
+        z-index: 10;
+    }
+
+
+
 </style>
 </head>
 <body>
 
 <!-- Video de introducción -->
 <video id="intro-video" autoplay loop muted playsinline>
-  <source src="https://www.dropbox.com/scl/fi/j1do2c3jep1deextw7n8y/CartaL1.mp4?rlkey=xhtbymylwh5rz0zfvk46la75r&st=x9n6vh6e&raw=1" type="video/mp4">
-  Tu navegador no soporta el video.
+    <source src="https://www.dropbox.com/scl/fi/j1do2c3jep1deextw7n8y/CartaL1.mp4?rlkey=xhtbymylwh5rz0zfvk46la75r&st=x9n6vh6e&raw=1" type="video/mp4">
 </video>
 
 <!-- Overlay negro -->
@@ -154,11 +191,33 @@
             <div class="contenido-animado">
                 <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/IFb2.png" class="imagen-scroll">
             </div>
+                <!-- 🌸 Botón de ubicación -->
+            <button class="boton-mapa" onclick="window.open('https://maps.app.goo.gl/TPh56eZqH2JSbPkT9', '_blank')">
+            ¿Cómo llegar?
+            </button>
         </div>
     </div>
 </section>
 
 <section id="seccion3" class="full-section">
+<div class="contenedor-principal reveal">
+    <div class="imagen-fija-wrapper">
+    <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/BGb4.png" class="imagen-fija">
+    <div class="contenido-animado">
+        <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/IFb4.png" class="imagen-scroll">
+
+        <!-- 🎬 VIDEO CENTRADO -->
+        <video id="video-seccion3" class="video-seccion" muted playsinline preload="auto">
+        <source src="https://www.dropbox.com/scl/fi/nwnbzx2ohudhbq26658em/RebeVd.mp4?rlkey=yek99l1pb46y09hfhzffoyo1r&st=579c4jzp&raw=1" type="video/mp4">
+        Tu navegador no soporta video.
+        </video>
+    </div>
+    </div>
+</div>
+</section>
+
+
+<section id="seccion4" class="full-section">
     <div class="contenedor-principal reveal">
         <div class="imagen-fija-wrapper">
             <img src="https://raw.githubusercontent.com/Aleg160/Imgbod/refs/heads/main/BGb3.png" class="imagen-fija">
@@ -195,8 +254,28 @@ document.addEventListener('DOMContentLoaded', () => {
         music.play().catch(err => console.log("Error al reproducir música:", err));
     }, { once: true }); // se ejecuta solo una vez
 });
+
+    const seccion3 = document.getElementById('seccion3');
+    const videoSeccion3 = document.getElementById('video-seccion3');
+
+    const observerVideo = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            videoSeccion3.style.display = 'block';
+            videoSeccion3.play().catch(error => {
+            console.log("⚠️ El navegador bloqueó la reproducción automática. Requiere interacción del usuario.", error);
+            });
+        } else {
+            videoSeccion3.pause();
+            videoSeccion3.style.display = 'none';
+        }
+        });
+    }, { threshold: 0.5 });
+
+    observerVideo.observe(seccion3);
+
+
 </script>
 
 </body>
 </html>
-
